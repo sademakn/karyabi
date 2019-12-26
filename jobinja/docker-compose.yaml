@@ -1,8 +1,0 @@
-version: '2.2'
-services:
-  jobinja:
-      build: .
-      image: jobinja:latest
-      ports:
-        - 2000:5000
-      restart: always

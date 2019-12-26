@@ -1,0 +1,16 @@
+version: "2.2"
+services:
+  selenium:
+    image: selenium/standalone-chrome:latest
+    ports:
+      - 2001:4444
+    restart: always
+
+  jobinja:
+    build: jobinja
+    image: jobinja:latest
+    ports:
+      - 2000:5000
+    restart: always
+    links:
+      - "selenium:selenium"

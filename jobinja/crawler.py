@@ -1,6 +1,5 @@
 from selenium import webdriver
 
-
 url = "https://jobinja.ir/"
 
 chrome_options = webdriver.ChromeOptions()
@@ -9,8 +8,15 @@ chrome_options.add_argument("--maximize")
 
 
 def get_jobinja_jobs(job_query):
-    driver = webdriver.Chrome(
-        executable_path="driver_files/chromedriver", options=chrome_options
+    ## debug mode :
+    # driver = webdriver.Chrome(
+    #     executable_path="driver_files/chromedriver", options=chrome_options
+    # )
+
+    ## production mode :
+    driver = webdriver.Remote(
+        command_executor="http://selenium:4444/wd/hub",
+        desired_capabilities=webdriver.common.desired_capabilities.DesiredCapabilities.CHROME,
     )
     res = driver.get(url)
 
