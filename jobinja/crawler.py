@@ -47,4 +47,5 @@ def get_jobinja_jobs(job_query):
                 "job_complement_info": job_complement_info,
             }
         )
+    driver.close()
     return jobs
