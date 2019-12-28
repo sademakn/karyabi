@@ -1,14 +1,21 @@
 from flask import Flask, request
 
 from crawler import get_jobvision_jobs
+from diskcache import Cache
 
 app = Flask(__name__)
+jobvision_cache = Cache("jobvision_cache")
 
 
 @app.route("/query-jobvision", methods=["POST"])
 def query_jobvision():
     job_title = request.json["job_title"]
-    return {"results": get_jobvision_jobs(job_title)}
+    if job_title in jobvision_cache:
+        results = jobvision_cache.get(job_title)
+    else:
+        results = get_jobvision_jobs(job_title)
+        jobvision_cache.set(job_title, results, 24 * 60 * 60)
+    return {"results": results}
 
 
 @app.route("/status", methods=["Get"])
