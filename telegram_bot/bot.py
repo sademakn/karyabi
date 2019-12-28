@@ -1,3 +1,4 @@
+import requests
 import logging
 
 from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove
@@ -9,6 +10,7 @@ from telegram.ext import (
     ConversationHandler,
 )
 import os
+
 TOKEN = os.getenv("BOT_TOKEN")
 
 # Enable logging
@@ -39,8 +41,23 @@ def name(update, context):
 def interest(update, context):
     user = update.message.from_user
     logger.info("interest of %s: %s", user.id, update.message.text)
-    update.message.reply_text("چند تا شغل اینجا میاد")
-    return ConversationHandler.END
+    results = requests.post(
+        "http://jobinja:5000/query-jobinja",
+        json={"job_title": update.message.text},
+        headers={"Content-Type": "application/json"},
+    )
+    for result in results.json()["results"]:
+        update.message.reply_text("\n\n".join(result.values()))
+
+    results = requests.post(
+        "http://jobvision:5000/query-jobvision",
+        json={"job_title": update.message.text},
+        headers={"Content-Type": "application/json"},
+    )
+    print(">>>>>>> ", results)
+    for result in results.json()["results"]:
+        update.message.reply_text("\n\n".join(result.values()))
+    return INTEREST
 
 
 def cancel(update, context):

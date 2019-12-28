@@ -26,10 +26,12 @@ services:
   telegram_bot:
     build: telegram_bot
     image: telegram_bot:latest
-    # entrypoint: env
     env_file: 
       - telegram_bot/.env
     ports:
       - 2003:5000
     restart: always
+    links: 
+      - jobinja:jobinja
+      - jobvision:jobvision
 
