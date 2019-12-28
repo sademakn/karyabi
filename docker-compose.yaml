@@ -1,5 +1,6 @@
 version: "2.2"
 services:
+
   selenium:
     image: selenium/standalone-chrome:latest
     restart: always
@@ -21,3 +22,14 @@ services:
     restart: always
     links:
       - "selenium:selenium"
+
+  telegram_bot:
+    build: telegram_bot
+    image: telegram_bot:latest
+    # entrypoint: env
+    env_file: 
+      - telegram_bot/.env
+    ports:
+      - 2003:5000
+    restart: always
+
